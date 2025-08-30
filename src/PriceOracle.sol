@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import {AggregatorV3Interface} from "smartcontractkit-chainlink-evm/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
+import {AggregatorV3Interface} from
+    "smartcontractkit-chainlink-evm/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 
 enum Feed {
     EthUsd,
@@ -38,21 +39,19 @@ contract PriceOracle {
     /**
      * Returns the latest answer.
      */
-    function getChainlinkDataFeedLatestAnswer(
-        Feed feed
-    ) public view returns (int, uint) {
+    function getChainlinkDataFeedLatestAnswer(Feed feed) public view returns (int256, uint256) {
         // @todo: add checks to confirm this is not an outdated price
-        AggregatorV3Interface dataFeed = feed == Feed.EthUsd
-            ? AggregatorV3Interface(EthUsdFeed)
-            : AggregatorV3Interface(DaiUsdFeed);
+        AggregatorV3Interface dataFeed =
+            feed == Feed.EthUsd ? AggregatorV3Interface(EthUsdFeed) : AggregatorV3Interface(DaiUsdFeed);
         (
             ,
-            /* uint80 roundId */ int256 answer,
+            /* uint80 roundId */
+            int256 answer,
             ,
-            /*uint256 startedAt*/ uint256 updatedAt /*uint80 answeredInRound*/,
-
+            /*uint256 startedAt*/
+            uint256 updatedAt, /*uint80 answeredInRound*/
         ) = dataFeed.latestRoundData();
-        uint precision = dataFeed.decimals();
+        uint256 precision = dataFeed.decimals();
         require(updatedAt >= block.timestamp - 30 minutes, "Price is outdated");
         require(answer > 0, "Invalid price");
         return (answer, precision);

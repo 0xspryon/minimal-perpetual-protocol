@@ -7,12 +7,12 @@ enum PositionType {
 }
 
 struct Position {
-    uint size;
+    uint256 size;
     address owner;
-    uint id;
-    uint openedAt;
-    uint indexTokenPrice;
-    uint indexTokenSize;
-    uint leverage;
+    uint256 id;
+    uint256 openedAt;
+    uint256 indexTokenPrice;
+    uint256 indexTokenSize;
+    uint256 leverage;
     PositionType positionType;
 }

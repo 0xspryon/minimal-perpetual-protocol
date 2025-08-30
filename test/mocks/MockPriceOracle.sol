@@ -40,23 +40,21 @@ contract MockPriceOracle is AggregatorV3Interface {
         return 1;
     }
 
-    function getRoundData(uint80 _id) external view override returns (
-        uint80 roundId,
-        int256 answer,
-        uint256 startedAt,
-        uint256 updatedAt,
-        uint80 answeredInRound
-    ) {
+    function getRoundData(uint80 _id)
+        external
+        view
+        override
+        returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound)
+    {
         return (_id, _price, _timestamp, _timestamp, _id);
     }
 
-    function latestRoundData() external view override returns (
-        uint80 roundId,
-        int256 answer,
-        uint256 startedAt,
-        uint256 updatedAt,
-        uint80 answeredInRound
-    ) {
+    function latestRoundData()
+        external
+        view
+        override
+        returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound)
+    {
         return (_roundId, _price, _timestamp, _timestamp, _roundId);
     }
 }

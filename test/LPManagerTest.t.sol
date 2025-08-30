@@ -21,7 +21,7 @@ contract LPManagerTest is BaseTest {
 
     function test_deposit_minimumAmount() public {
         uint256 depositAmount = 10 ether;
-        
+
         vm.startPrank(ALICE);
         MDAI.approve(address(lpManager), depositAmount);
         uint256 shares = lpManager.deposit(depositAmount, ALICE);
@@ -34,7 +34,7 @@ contract LPManagerTest is BaseTest {
 
     function test_deposit_belowMinimum() public {
         uint256 depositAmount = 5 ether; // Below 10 ether minimum
-        
+
         vm.startPrank(ALICE);
         MDAI.approve(address(lpManager), depositAmount);
         vm.expectRevert("Can't deposit less than 10 DAI");
@@ -44,7 +44,7 @@ contract LPManagerTest is BaseTest {
 
     function test_deposit_multipleUsers() public {
         uint256 depositAmount = 100 ether;
-        
+
         // Alice deposits
         vm.startPrank(ALICE);
         MDAI.approve(address(lpManager), depositAmount);
@@ -65,12 +65,12 @@ contract LPManagerTest is BaseTest {
     function test_withdraw() public {
         uint256 depositAmount = 100 ether;
         uint256 withdrawAmount = 50 ether;
-        
+
         // First deposit
         vm.startPrank(ALICE);
         MDAI.approve(address(lpManager), depositAmount);
         lpManager.deposit(depositAmount, ALICE);
-        
+
         // Then withdraw
         uint256 balanceBefore = MDAI.balanceOf(ALICE);
         uint256 sharesBurned = lpManager.withdraw(withdrawAmount, ALICE, ALICE);
@@ -83,11 +83,11 @@ contract LPManagerTest is BaseTest {
 
     function test_withdraw_shares() public {
         uint256 depositAmount = 100 ether;
-        
+
         vm.startPrank(ALICE);
         MDAI.approve(address(lpManager), depositAmount);
         uint256 shares = lpManager.deposit(depositAmount, ALICE);
-        
+
         uint256 balanceBefore = MDAI.balanceOf(ALICE);
         uint256 assetsReceived = lpManager.redeem(shares / 2, ALICE, ALICE);
         uint256 balanceAfter = MDAI.balanceOf(ALICE);
@@ -99,7 +99,7 @@ contract LPManagerTest is BaseTest {
 
     function test_totalAssets() public {
         uint256 depositAmount = 100 ether;
-        
+
         vm.startPrank(ALICE);
         MDAI.approve(address(lpManager), depositAmount);
         lpManager.deposit(depositAmount, ALICE);
@@ -111,7 +111,7 @@ contract LPManagerTest is BaseTest {
     function test_totalAssets_withLockedAmount() public {
         uint256 depositAmount = 100 ether;
         uint256 lockedAmount = 30 ether;
-        
+
         vm.startPrank(ALICE);
         MDAI.approve(address(lpManager), depositAmount);
         lpManager.deposit(depositAmount, ALICE);
@@ -123,10 +123,6 @@ contract LPManagerTest is BaseTest {
 
         assertEq(lpManager.totalAssets(), depositAmount - lockedAmount);
     }
-
-
-
-
 
     function test_increaseLockedAmount_onlyOwner() public {
         vm.startPrank(ALICE);
@@ -144,7 +140,7 @@ contract LPManagerTest is BaseTest {
 
     function test_withdrawLosses() public {
         uint256 lossAmount = 50 ether;
-        
+
         // Setup some assets in the LP manager
         vm.startPrank(ALICE);
         MDAI.approve(address(lpManager), 100 ether);
@@ -155,7 +151,7 @@ contract LPManagerTest is BaseTest {
         vm.prank(OWNER);
         lpManager.withdrawLosses(JANE, lossAmount);
         uint256 recipientBalanceAfter = MDAI.balanceOf(JANE);
-        
+
         assertEq(recipientBalanceAfter - recipientBalanceBefore, lossAmount);
     }
 
