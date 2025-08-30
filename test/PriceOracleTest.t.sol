@@ -64,11 +64,12 @@ contract PriceOracleTest is BaseTest {
     function test_setFeeds_onlyOwner() public {
         // This test would be relevant if setFeeds had access control
         // Currently it doesn't, so we just test it works
-        address newDaiFeed = address(0x123);
-        address newEthFeed = address(0x456);
+        // Create proper mock feeds to avoid interface issues
+        MockPriceOracle newDaiFeed = new MockPriceOracle(1e8, 8);
+        MockPriceOracle newEthFeed = new MockPriceOracle(2000e8, 8);
         
         vm.prank(ALICE);
-        priceOracle.setFeeds(newDaiFeed, newEthFeed);
+        priceOracle.setFeeds(address(newDaiFeed), address(newEthFeed));
         
         // Should not revert
     }
@@ -79,9 +80,16 @@ contract PriceOracleTest is BaseTest {
 
 
 
-    function test_feedEnumValues() public {
+    function test_feedEnumValues() public pure {
         // Test that enum values are correct
-        assertEq(uint256(Feed.EthUsd), 0);
-        assertEq(uint256(Feed.DaiUsd), 1);
+        // Explicitly test each enum value to ensure they match expected values
+        uint256 ethUsdValue = uint256(Feed.EthUsd);
+        uint256 daiUsdValue = uint256(Feed.DaiUsd);
+        
+        require(ethUsdValue == 0, "Feed.EthUsd should equal 0");
+        require(daiUsdValue == 1, "Feed.DaiUsd should equal 1");
+        
+        // Additional validation to ensure enum values are sequential
+        require(daiUsdValue == ethUsdValue + 1, "Enum values should be sequential");
     }
 }
