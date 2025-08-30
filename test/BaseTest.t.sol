@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import "forge-std-1.10.0/src/Test.sol";
+import "forge-std/Test.sol";
 import "src/PositionManager.sol";
 import "src/interfaces/ICollateralManager.sol";
 import "./mocks/MockDAI.sol";
@@ -18,7 +18,7 @@ contract BaseTest is Test {
     ICollateralManager collateralManager;
     MockDAI MDAI;
 
-    function setUp() public {
+    function setUp() public virtual {
         MDAI = new MockDAI();
         posManager = new PositionManager(OWNER, address(MDAI));
 
