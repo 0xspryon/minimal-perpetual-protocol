@@ -28,15 +28,25 @@ contract PriceOracleTest is BaseTest {
     }
 
     function test_setFeeds() public {
-        address newDaiFeed = address(0x123);
-        address newEthFeed = address(0x456);
+        // Warp to a future timestamp to avoid the 30-minute staleness check
+        vm.warp(block.timestamp + 1 hours);
         
-        priceOracle.setFeeds(newDaiFeed, newEthFeed);
+        // Create proper mock feeds that implement the Chainlink interface
+        MockPriceOracle newDaiFeed = new MockPriceOracle(1e8, 8);  // $1 DAI
+        MockPriceOracle newEthFeed = new MockPriceOracle(2000e8, 8); // $2000 ETH
         
-        // We can't directly access the private variables, but we can test through getChainlinkDataFeedLatestAnswer
-        // This will fail if the feeds weren't set correctly
-        vm.expectRevert(); // Should revert because mock addresses don't implement the interface
-        priceOracle.getChainlinkDataFeedLatestAnswer(Feed.EthUsd);
+        priceOracle.setFeeds(address(newDaiFeed), address(newEthFeed));
+        
+        // Now we can test that the feeds were set correctly by calling getChainlinkDataFeedLatestAnswer
+        // This should not revert since we're using proper mock contracts
+        (int256 ethPrice, uint256 ethPrecision) = priceOracle.getChainlinkDataFeedLatestAnswer(Feed.EthUsd);
+        (int256 daiPrice, uint256 daiPrecision) = priceOracle.getChainlinkDataFeedLatestAnswer(Feed.DaiUsd);
+        
+        // Verify the prices match our mock values
+        assertEq(ethPrice, 2000e8);
+        assertEq(daiPrice, 1e8);
+        assertEq(ethPrecision, 8);
+        assertEq(daiPrecision, 8);
     }
 
 
