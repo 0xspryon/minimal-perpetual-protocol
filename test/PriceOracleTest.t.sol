@@ -88,8 +88,5 @@ contract PriceOracleTest is BaseTest {
         
         require(ethUsdValue == 0, "Feed.EthUsd should equal 0");
         require(daiUsdValue == 1, "Feed.DaiUsd should equal 1");
-        
-        // Additional validation to ensure enum values are sequential
-        require(daiUsdValue == ethUsdValue + 1, "Enum values should be sequential");
     }
 }
