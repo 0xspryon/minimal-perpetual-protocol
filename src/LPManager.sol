@@ -8,32 +8,26 @@ import {Math} from "@openzeppelin-contracts/utils/math/Math.sol";
 contract LPManager is ERC4626, Ownable {
     using Math for uint256;
 
-    uint lockedAmount;
+    uint256 public lockedAmount;
 
-    constructor(
-        IERC20 asset_,
-        string memory name_,
-        string memory symbol_,
-        address owner
-    ) ERC4626(asset_) ERC20(name_, symbol_) Ownable(owner) {}
+    constructor(IERC20 asset_, string memory name_, string memory symbol_, address owner_)
+        ERC4626(asset_)
+        ERC20(name_, symbol_)
+        Ownable(owner_)
+    {}
 
-    function _deposit(
-        address caller,
-        address receiver,
-        uint256 assets,
-        uint256 shares
-    ) internal virtual override {
+    function _deposit(address caller, address receiver, uint256 assets, uint256 shares) internal virtual override {
         // user can't deposit less than 10 dai of collateral.
         // This isn't an issue as DAI has 18 decimals on ETH mainnet
         require(assets >= 10 ether, "Can't deposit less than 10 DAI");
         super._deposit(caller, receiver, assets, shares);
     }
 
-    function decreaseLockedAmount(uint amount) external onlyOwner {
+    function decreaseLockedAmount(uint256 amount) external onlyOwner {
         lockedAmount -= amount;
     }
 
-    function increaseLockedAmount(uint amount) external onlyOwner {
+    function increaseLockedAmount(uint256 amount) external onlyOwner {
         lockedAmount += amount;
     }
 
@@ -43,7 +37,7 @@ contract LPManager is ERC4626, Ownable {
     }
 
     // the losses of the LP are the profits of the traders
-    function withdrawLosses(address recipient, uint amount) public onlyOwner {
+    function withdrawLosses(address recipient, uint256 amount) public onlyOwner {
         bool success = IERC20(asset()).transfer(recipient, amount);
         require(success, "transfer failed");
     }

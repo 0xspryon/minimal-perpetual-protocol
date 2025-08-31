@@ -1,3 +1,15 @@
 [submodule "lib/forge-std"]
 	path = lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
+[submodule "dependencies/forge-std"]
+	path = dependencies/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "dependencies/openzeppelin-contracts"]
+	path = dependencies/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "dependencies/chainlink"]
+	path = dependencies/chainlink
+	url = https://github.com/smartcontractkit/chainlink
+[submodule "dependencies/chainlink-brownie-contracts"]
+	path = dependencies/chainlink-brownie-contracts
+	url = https://github.com/smartcontractkit/chainlink-brownie-contracts

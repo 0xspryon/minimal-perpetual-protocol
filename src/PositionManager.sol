@@ -16,9 +16,9 @@ contract PositionManager is PriceOracle, Ownable {
     LPManager public lpManager;
     CollateralManager public collateralManager;
 
-    constructor(address owner, address asset) Ownable(owner) {
-        lpManager = new LPManager(IERC20(asset), "LP DAI", "LPDAI", address(this));
-        collateralManager = new CollateralManager(asset);
+    constructor(address _owner, address asset) Ownable(_owner) {
+        lpManager = new LPManager(IERC20(asset), "LP DAI", "LPDAI", _owner);
+        collateralManager = new CollateralManager(asset, _owner);
     }
 
     function _setFeed(address daiUsd, address ethUsd) internal override onlyOwner {

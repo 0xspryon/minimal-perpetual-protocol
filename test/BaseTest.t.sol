@@ -18,7 +18,7 @@ contract BaseTest is Test {
     ICollateralManager collateralManager;
     MockDAI MDAI;
 
-    function setUp() public {
+    function setUp() public virtual {
         MDAI = new MockDAI();
         posManager = new PositionManager(OWNER, address(MDAI));
 

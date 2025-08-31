@@ -11,7 +11,7 @@ contract CollateralManager is Ownable, ICollateralManager {
     mapping(address depositor => Deposit) private userDeposits;
     uint256 public totalDeposits;
 
-    constructor(address _collateral) Ownable(msg.sender) {
+    constructor(address _collateral, address _owner) Ownable(_owner) {
         collateral = _collateral;
     }
 
